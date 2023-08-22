@@ -1,0 +1,20 @@
+{
+	"name": "ServLess Ext parquet",
+	"properties": {
+		"folder": {
+			"name": "DP-203"
+		},
+		"content": {
+			"query": "create DATABASE [appdb]\n\nCREATE MASTER KEY ENCRYPTION BY PASSWORD = 'P@ssw0rd@123';\n\ncreate DATABASE SCOPED CREDENTIAL SasToken\nwith IDENTITY ='SHARED ACCESS SIGNATURE'\n,SECRET = 'sv=2022-11-02&ss=b&srt=sco&sp=rwl&se=2023-08-20T17:03:16Z&st=2023-08-20T09:03:16Z&spr=https&sig=4FoTMjBBjTxHJ5sttYGR37NMJVhj%2FyhYQyk3ZaTFW6Q%3D'\n\n--DROP EXTERNAL DATA SOURCE log_data;\n\nCREATE EXTERNAL DATA SOURCE log_data_parquet\nWITH (\n    LOCATION = 'https://accountdp203.blob.core.windows.net/parquet/',\n    CREDENTIAL =SasToken \n);\n\nCREATE EXTERNAL FILE FORMAT parquetfile WITH(\n    FORMAT_TYPE = PARQUET,\n    DATA_COMPRESSION = 'org.apache.hadoop.io.compress.SnappyCodec'\n)\n    \ndrop EXTERNAL TABLE [logdata_parquet]\n\nCREATE EXTERNAL TABLE [logdata_parquet]\n(\n    [Correlation id] [varchar](200) NULL,\n\t[Operation name] [varchar](200) NULL,\n\t[Status] [varchar](100) NULL,\n\t[Event category] [varchar](100) NULL,\n\t[Level] [varchar](100) NULL,\n\t[Time] [varchar](100)  NULL,\n\t[Subscription] [varchar](200) NULL,\n\t[Event initiated by] [varchar](1000) NULL,\n\t[Resource type] [varchar](1000) NULL,\n\t[Resource group] [varchar](1000) NULL,\n    [Resource] [varchar](2000) NULL)\nWITH (\n    LOCATION = '/log.parquet',\n    DATA_SOURCE = log_data_parquet,\n    FILE_FORMAT = parquetfile\n)\n\nSELECT * FROM [logdata_parquet]\n\nDROP EXTERNAL TABLE [logdata_parquet]\n\nCREATE EXTERNAL TABLE [logdata_parquet]\n(\n    [Correlationid] [varchar](200) NULL,\n\t[Operationname] [varchar](200) NULL,\n\t[Status] [varchar](100) NULL,\n\t[Eventcategory] [varchar](100) NULL,\n\t[Level] [varchar](100) NULL,\n\t[Time] [varchar](100)  NULL,\n\t[Subscription] [varchar](200) NULL,\n\t[Eventinitiatedby] [varchar](1000) NULL,\n\t[Resourcetype] [varchar](1000) NULL,\n\t[Resourcegroup] [varchar](1000) NULL,\n    [Resource] [varchar](2000) NULL)\nWITH (\n LOCATION = '/log.parquet',\n    DATA_SOURCE = log_data_parquet,  \n    FILE_FORMAT = parquetfile\n)",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "appdb",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

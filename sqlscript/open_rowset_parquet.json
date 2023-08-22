@@ -1,0 +1,20 @@
+{
+	"name": "open_rowset_parquet",
+	"properties": {
+		"folder": {
+			"name": "DP-203"
+		},
+		"content": {
+			"query": "SELECT \ntop 10 * FROM OPENROWSET(\n    BULK 'https://accountdp203.dfs.core.windows.net/parquet/log.parquet',\n    FORMAT = 'PARQUET'\n) AS [temp_parquet_log]\n\n--SELECT * from temp_parquet_log",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
